@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESCAPE FROM MZ - 3D Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+<body>
+    <div id="gameContainer"></div>
+    
+    <div id="ui">
+        <div id="crosshair"></div>
+        <div id="lives">Lives: 3</div>
+        <div id="bookCounter">Remaining Books: 3</div>
+        <div id="instructions">WASD to Move | Mouse to Look | Get close to books and press E to collect</div>
+        <div id="interactPrompt">Press E to interact</div>
+    </div>
+
+    <!-- JOYSTICK KONTROLLERİ (Akıllı Tahta için) -->
+    <div id="touchControls">
+        <!-- HAREKET JOYSTİĞİ (WASD) -->
+        <div class="joystick-container" id="movementJoystick">
+            <div class="joystick-base">
+                <div class="joystick-handle" id="moveHandle">
+                    <span class="joystick-arrow">⬆️</span>
+                </div>
+            </div>
+            <div class="joystick-label">HAREKET</div>
+        </div>
+
+        <!-- BAKIŞ JOYSTİĞİ (MOUSE) -->
+        <div class="joystick-container" id="lookJoystick">
+            <div class="joystick-base">
+                <div class="joystick-handle" id="lookHandle">
+                    <span class="joystick-arrow">👁️</span>
+                </div>
+            </div>
+            <div class="joystick-label">BAKIŞ</div>
+        </div>
+
+        <!-- KIRMIZI E BUTONU (Etkileşim) -->
+        <button class="action-button" id="interactButton">
+            <span class="button-icon">📚</span>
+            <span class="button-label">E</span>
+        </button>
+
+        <!-- FARE KİLİT BUTONU -->
+        <button class="action-button" id="lockPointerButton">
+            <span class="button-icon">🔒</span>
+            <span class="button-label">KİLİT</span>
+        </button>
+    </div>
+
+    <!-- JOYSTICK CSS STİLLERİ -->
+    <style>
+        #touchControls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2000;
+        }
+
+        .joystick-container {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            pointer-events: auto;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #movementJoystick {
+            bottom: 120px;
+            left: 30px;
+        }
+
+        #lookJoystick {
+            bottom: 120px;
+            right: 30px;
+        }
+
+        .joystick-base {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .joystick-handle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.05s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border: 2px solid white;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        #moveHandle {
+            background: rgba(0, 255, 0, 0.9);
+            color: white;
+        }
+
+        #lookHandle {
+            background: rgba(255, 255, 0, 0.9);
+            color: black;
+        }
+
+        .joystick-handle:active {
+            transform: scale(0.9);
+        }
+
+        .joystick-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 2px 2px 2px black;
+            pointer-events: none;
+        }
+
+        .action-button {
+            position: fixed;
+            bottom: 30px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid white;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px currentColor;
+            transition: all 0.2s;
+            z-index: 2001;
+        }
+
+        #interactButton {
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 0, 0, 0.9);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        #lockPointerButton {
+            right: 30px;
+            background: rgba(76, 175, 80, 0.9);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+        }
+
+        .action-button:active {
+            transform: translateX(-50%) scale(0.9);
+        }
+
+        #lockPointerButton:active {
+            transform: scale(0.9);
+        }
+
+        .button-icon {
+            font-size: 24px;
+        }
+
+        .button-label {
+            font-size: 14px;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .joystick-container {
+                width: 100px;
+                height: 100px;
+            }
+            .joystick-handle {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            .action-button {
+                width: 70px;
+                height: 70px;
+            }
+            #lockPointerButton {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+
+    <div id="startScreen">
+        <img src="assets/logo.png" alt="Logo" id="gameLogo">
+        <h1>MZ'S BASİCS</h1>
+        <h1>ESCAPE FROM MZ</h1>
+        <p>MZ is getting ready to give you a minus</p>
+        <p>Click or Touch to start...</p>
+        <p>Created by Emir Samet Güzel</p>
+    </div>
+
+    <div id="gameOverScreen" class="hidden">
+        <h1>GAME OVER</h1>
+        <p>You couldn't escape from MZ...</p>
+        <button id="retryButton">TRY AGAIN</button>
+    </div>
+
+    <div id="questionModal">
+        <h2 id="questionTitle">Question</h2>
+        <div id="questionText"></div>
+        <div id="options"></div>
+    </div>
+
+    <div id="damageFlash"></div>
+
+    <div id="jumpscare">
+        <div class="mz-jumpscare">MZ</div>
+    </div>
+
+    <div id="jumpscareOverlay">
+        <img id="jumpscareImage" src="assets/jumpscare.png" alt="Jumpscare">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #000;
+    overflow: hidden;
+}
+
+#gameContainer {
+    width: 100vw;
+    height: 100vh;
+}
+
+#ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+#crosshair::before,
+#crosshair::after {
+    content: '';
+    position: absolute;
+    background: #fff;
+}
+
+#crosshair::before {
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#crosshair::after {
+    width: 20px;
+    height: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#lives {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #ff0000;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    z-index: 100;
+}
+
+#bookCounter {
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    color: #ffff00;
+    font-size: 24px;
+    font-family: 'Courier New', monospace;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 8px;
+    z-index: 100;
+    border: 2px solid #ffff00;
+    text-shadow: 0 0 10px #ffff00;
+    font-weight: bold;
+}
+
+#instructions {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #888;
+    font-size: 14px;
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#interactPrompt {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffff00;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ffff00;
+    display: none;
+    animation: pulse 1s infinite;
+}
+
+#startScreen, #gameOverScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    color: #ff0000;
+    z-index: 1000;
+}
+
+#startScreen h1, #gameOverScreen h1 {
+    font-size: 72px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+    animation: pulse 2s infinite;
+}
+
+#startScreen p, #gameOverScreen p {
+    font-size: 24px;
+    text-shadow: 0 0 10px #ff0000;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+#questionModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(20, 0, 0, 0.95);
+    border: 3px solid #ff0000;
+    padding: 30px;
+    border-radius: 10px;
+    color: #fff;
+    z-index: 500;
+    display: none;
+    pointer-events: all;
+    box-shadow: 0 0 50px #ff0000;
+    max-width: 600px;
+}
+
+#questionModal h2 {
+    color: #ff0000;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+#questionText {
+    margin-bottom: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    background: #1a0000;
+    border: 2px solid #ff0000;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Courier New', monospace;
+}
+
+.option:hover {
+    background: #ff0000;
+    color: #000;
+    transform: scale(1.05);
+}
+
+#retryButton {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 20px;
+    background: #ff0000;
+    color: #fff;
+    border: 3px solid #fff;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    border-radius: 5px;
+    pointer-events: all;
+    transition: all 0.3s;
+}
+
+#retryButton:hover {
+    background: #fff;
+    color: #ff0000;
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #ff0000;
+}
+
+#damageFlash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ff0000;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+}
+
+#jumpscare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1500;
+}
+#gameLogo {
+    width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+    filter: drop-shadow(0 0 10px #ff0000);
+}
+
+#jumpscare .mz-jumpscare {
+    font-size: 400px;
+    color: #ff0000;
+    font-weight: bold;
+    animation: jumpscareAnim 0.5s;
+    text-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000;
+}
+
+@keyframes jumpscareAnim {
+    0% { transform: scale(0) rotate(0deg); }
+    50% { transform: scale(1.3) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+#jumpscareOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#jumpscareOverlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+#jumpscareImage {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.hidden {
+    display: none !important;
+}
