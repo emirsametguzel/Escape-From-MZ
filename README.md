@@ -66,6 +66,7 @@ All rights reserved by **Emir Samet Güzel**.
 **Emir Samet Güzel** 
 Instagram: @emirsamet_guzel
 Github: @emirsametguzel
+emirsametguzel@gmail.com
 
 ---
 
